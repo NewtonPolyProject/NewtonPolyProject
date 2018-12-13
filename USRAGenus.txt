@@ -1,0 +1,13 @@
+polyGenus=L->(
+	length interiorLatticePoints convexHull transpose matrix L
+)
+
+
+genusList=L->(
+	g := openIn("PolyList2.txt");
+	while 1 == 1 do (
+		f := openOutAppend("Genuses.txt");
+		f << polyGenus(value(read(g,106))) << endl;
+		close(f);
+	);
+)

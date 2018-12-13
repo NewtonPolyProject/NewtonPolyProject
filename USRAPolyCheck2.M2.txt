@@ -1,0 +1,28 @@
+checkPoly=L->(
+    c:=min(apply(L,a->a_0));
+    d:=min(apply(L,a->a_1));
+    ms:={};
+    LL:=apply(L,i->{i_0-c,i_1-d});
+    P:=convexHull transpose matrix LL; -- create a polygon from list of vertices
+    lp:=apply(latticePoints P,i->flatten entries i); -- list of all lattice points in P 
+    R:=QQ[apply(lp,i->a_i)]; -- ring with variables indexed by lattice points of P
+    S:=R[x_0,x_1,Join=>false]; -- ring for our polynomial f
+    f:=sum apply(lp,i->(a_i)*(x_0^(i_0))*(x_1^(i_1))); -- create a general polynomial with P as newton polygon
+    C:=coefficients sub(f,{x_0=>x_0+1,x_1=>x_1+1}); -- do change of variables and make coefficient matrix
+    for m from ceiling sqrt (2*(volume P)) to first degree f do ( -- we need the vanishing multiplicity to be at least m
+    	I:=sub(ideal (flatten entries C_1)_(positions(flatten entries C_0,i->(degree i)_0<m)),R); -- conditions imposed on the coefficients by the multiplicity requirement
+    	if not any(LL,i->R_(position(lp,j->j==i))%I==0) then (ms=append(ms,m)); -- checks if any of the coefficients for a vertex vanishes
+    );
+    return ms;
+)
+
+
+polyList2=L->(
+	g := openIn("PolyList2.txt");
+	while 1 == 1 do (
+		f := openOutAppend("Multiplicities2.txt");
+		f << checkPoly(value(read(g,106))) << endl;
+		close(f);
+	);
+)
+		
