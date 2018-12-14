@@ -23,5 +23,5 @@ createFinalTable <- function() {
         #criterion is satisfied, and write to a table.
         finalPolys <- cbind(polygons, g, goodMults, triAreas, equality)
         
-        write.table(finalPolys, file="FinalPolygons.txt", row.names=FALSE, col.names=FALSE)
+        write.table(finalPolys, file="FinalPolygons.txt", row.names=FALSE, col.names=c("Polygon", "Genus", "Max Multiplicity", "Triangle Area", "Equality"))
 }
